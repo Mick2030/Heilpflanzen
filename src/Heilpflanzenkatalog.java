@@ -11,12 +11,16 @@ import java.util.Scanner;
  * Dieser Code dient nur zur Überprüfung meines Wissens von Java. Das ist auch der Grund, warum ich hier auf die Daten-
  * bank verzichte. Alle Rechte sind vorbehalten.
  */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Heilpflanzenkatalog {
 
     public static void main(String[] args) {
         List<Heilpflanze> pflanzen = new ArrayList<>();
-        // Teepflanzen zu der Liste hinzufügen
+
+        // 🌿 Teepflanzen zur Liste hinzufügen
         pflanzen.add(new Anis());
         pflanzen.add(new Arnika());
         pflanzen.add(new Cascara());
@@ -39,21 +43,20 @@ public class Heilpflanzenkatalog {
 
         Scanner scanner = new Scanner(System.in);
 
+        // 📌 Benutzer wählt Leiden aus
         System.out.println("Bitte geben Sie Ihre Leiden an:");
         System.out.println("*****************************************");
 
-        // Leiden anzeigen
+        // Liste der Hauptkategorien (Leiden) anzeigen
         for (int i = 0; i < Leiden.leiden.size(); i++) {
             System.out.println((i + 1) + ". " + Leiden.leiden.get(i));
         }
 
-        System.out.println("Bitte geben Sie Ihre Leiden an:");
-        System.out.println("*****************************************\n");
-
-        // Benutzer zur Auswahl auffordern
+        // Benutzerauswahl erfassen
         int choice0 = getValidInput(scanner, Leiden.leiden.size());
         List<String> selectedList = null;
 
+        // 🎯 Leiden-Kategorie auswählen
         switch (choice0) {
             case 1 -> selectedList = Bauchbeschwerden.bauchbeschwerden;
             case 2 -> selectedList = Nervenleiden.nervenleiden;
@@ -62,15 +65,18 @@ public class Heilpflanzenkatalog {
             default -> throw new IllegalStateException("Ungültige Auswahl: " + choice0);
         }
 
+        // 📌 Benutzer wählt spezifische Beschwerden aus
         System.out.println("\nBitte wählen Sie Ihre Beschwerden aus:");
         for (int i = 0; i < selectedList.size(); i++) {
             System.out.println((i + 1) + ". " + selectedList.get(i));
         }
 
+        // Benutzerauswahl erfassen
         int choice1 = getValidInput(scanner, selectedList.size());
         List<String> semiFinalList = null;
 
-        if (choice0 == 1) {
+        // 🩺 Spezifische Beschwerden auswählen
+        if (choice0 == 1) { // Bauchbeschwerden
             switch (choice1) {
                 case 1 -> semiFinalList = Blaehungen.blaehungen;
                 case 2 -> semiFinalList = Verstopfungen.verstopfungen;
@@ -78,12 +84,12 @@ public class Heilpflanzenkatalog {
                 case 4 -> semiFinalList = Gastrointestinaleentzuendungen.gastrointestinaleentzuendungen;
                 case 5 -> semiFinalList = Appetitlosigkeit.appetitlosigkeit;
             }
-        } else if (choice0 == 2) {
+        } else if (choice0 == 2) { // Nervenleiden
             switch (choice1) {
                 case 1 -> semiFinalList = Unruhezustaende.unruhezustaende;
                 case 2 -> semiFinalList = Neuropathien.neuropathien;
             }
-        } else if (choice0 == 3) {
+        } else if (choice0 == 3) { // Atemwegserkrankungen
             switch (choice1) {
                 case 1 -> semiFinalList = Katarrh.katarrh;
                 case 2 -> semiFinalList = Krampfhusten.krampfhusten;
@@ -92,7 +98,7 @@ public class Heilpflanzenkatalog {
                 case 5 -> semiFinalList = RachenentzuendungReizhusten.rachenentzuendungreizhusten;
                 case 6 -> semiFinalList = Erkaeltung.erkaeltung;
             }
-        } else if (choice0 == 4) {
+        } else if (choice0 == 4) { // Wunden/Rheuma
             switch (choice1) {
                 case 1 -> semiFinalList = Dermatitis.dermatitis;
                 case 2 -> semiFinalList = Rheuma.rheuma;
@@ -100,19 +106,23 @@ public class Heilpflanzenkatalog {
             }
         }
 
+        // 🍵 Passenden Tee auswählen
         if (semiFinalList != null && !semiFinalList.isEmpty()) {
             System.out.println("\nBitte wählen Sie den gewünschten Tee:\n");
             System.out.println("****************************************\n");
+
+            // Liste der Heiltees anzeigen
             for (int i = 0; i < semiFinalList.size(); i++) {
                 System.out.println((i + 1) + ". " + semiFinalList.get(i));
             }
 
+            // Benutzerauswahl erfassen
             int choice2 = getValidInput(scanner, semiFinalList.size());
             String selectedTea = semiFinalList.get(choice2 - 1);
 
             System.out.println("\nSie haben " + selectedTea + " gewählt.");
 
-            // Passende Pflanze aus der Liste holen
+            // 🔍 Passende Pflanze in der Liste suchen
             Heilpflanze gefundenePflanze = null;
             for (Heilpflanze pflanze : pflanzen) {
                 if (pflanze.intName.equalsIgnoreCase(selectedTea)) {
@@ -121,8 +131,9 @@ public class Heilpflanzenkatalog {
                 }
             }
 
+            // ℹ️ Pflanze gefunden oder nicht?
             if (gefundenePflanze != null) {
-                gefundenePflanze.printInfo();
+                gefundenePflanze.printInfo(); // Informationen zur Heilpflanze ausgeben
             } else {
                 System.out.println("⚠️ Keine genaue Übereinstimmung für " + selectedTea + " gefunden.");
             }
@@ -131,22 +142,27 @@ public class Heilpflanzenkatalog {
         scanner.close();
     }
 
+    /**
+     * 📌 Methode zur sicheren Eingabeüberprüfung
+     * @param scanner Scanner-Objekt
+     * @param max Maximale zulässige Auswahl
+     * @return Gültige Benutzereingabe
+     */
     private static int getValidInput(Scanner scanner, int max) {
         int input;
         while (true) {
-            if (scanner.hasNextInt()) {
+            if (scanner.hasNextInt()) { // Prüfen, ob eine Zahl eingegeben wurde
                 input = scanner.nextInt();
-                if (input >= 1 && input <= max) {
+                if (input >= 1 && input <= max) { // Prüfen, ob Zahl im gültigen Bereich liegt
                     return input;
                 }
             } else {
-                scanner.next();
+                scanner.next(); // Ungültige Eingabe überspringen
             }
             System.out.print("Ungültige Eingabe! Bitte eine Zahl zwischen 1 und " + max + " eingeben: ");
         }
     }
 }
-
         /*
 
         // Falls finalList ungültig ist
