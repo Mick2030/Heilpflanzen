@@ -11,9 +11,7 @@ import java.util.Scanner;
  * Dieser Code dient nur zur Überprüfung meines Wissens von Java. Das ist auch der Grund, warum ich hier auf die Daten-
  * bank verzichte. Alle Rechte sind vorbehalten.
  */
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+
 
 public class Heilpflanzenkatalog {
 
